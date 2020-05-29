@@ -29,7 +29,7 @@ public class ControllerExceptionHandler {
 
         ModelAndView mv =new ModelAndView();
         mv.addObject("url",request.getRequestURL());
-        mv.addObject("exception",e);
+        mv.addObject("Exception",e);
         mv.setViewName("error/error");
         return mv;
     }
