@@ -27,3 +27,4 @@ out
 gen
 !/src/
 /log/
+/src/main/resources/static/images/emoji/

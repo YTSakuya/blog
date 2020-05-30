@@ -27,11 +27,11 @@ public class Blog {
     private boolean shareStatement;     //转载声明是否开启
     private boolean commentable;        //评论是否开启
     private boolean recommend;          //是否推荐
-    private boolean published; //是否发布还是保存为草稿
+    private boolean published;          //是否发布还是保存为草稿
     @Temporal(TemporalType.TIMESTAMP)   //指定时间的类型
-    private Date createTime; //博客创建时间
+    private Date createTime;            //博客创建时间
     @Temporal(TemporalType.TIMESTAMP)   //指定时间的类型
-    private Date updateTime; //博客更新时间
+    private Date updateTime;            //博客更新时间
 
     @ManyToOne                          //指定对应关系为多对一
     private Type type;                  //多个博客可从属于一个分类

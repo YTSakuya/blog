@@ -12,5 +12,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface TypeRepository extends JpaRepository<Type,Long> {
 
-
+    Type findByName(String name);
 }
