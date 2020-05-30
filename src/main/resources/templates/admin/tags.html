@@ -38,7 +38,7 @@
   <div class="ui attached pointing menu">
     <div class="ui container">
       <div class="right menu">
-        <a href="#" th:href="@{/admin/tags/input}" class="item">新增</a>
+        <a href="#" th:href="@{/admin/tags/add}" class="item">新增</a>
         <a href="#" th:href="@{/admin/tags}" class="teal active item">列表</a>
       </div>
     </div>
@@ -65,7 +65,7 @@
             <td th:text="${iterStat.count}">1</td>
             <td th:text="${type.name}">刻意练习清单</td>
             <td>
-              <a href="#" th:href="@{/admin/tags/{id}/input(id=${type.id})}" class="ui mini teal basic button">编辑</a>
+              <a href="#" th:href="@{/admin/tags/{id}/edit(id=${type.id})}" class="ui mini teal basic button">编辑</a>
               <a href="#" th:href="@{/admin/tags/{id}/delete(id=${type.id})}" class="ui mini red basic button">删除</a>
             </td>
           </tr>
@@ -77,7 +77,7 @@
                 <a th:href="@{/admin/tags(page=${page.number}-1)}" class="  item" th:unless="${page.first}">上一页</a>
                 <a th:href="@{/admin/tags(page=${page.number}+1)}" class=" item" th:unless="${page.last}">下一页</a>
               </div>
-              <a href="#" th:href="@{/admin/tags/input}"  class="ui mini right floated teal basic button">新增</a>
+              <a href="#" th:href="@{/admin/tags/add}"  class="ui mini right floated teal basic button">新增</a>
             </th>
           </tr>
         </tfoot>
