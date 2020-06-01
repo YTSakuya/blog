@@ -44,7 +44,7 @@ public class TagController {
     }
 
     @GetMapping("/tags/{id}/edit")
-    public String editTag(@PathVariable Long id, Model model){
+    public String edit(@PathVariable Long id, Model model){
         model.addAttribute("tag",new Tag());
         return "admin/tags-input";
     }
