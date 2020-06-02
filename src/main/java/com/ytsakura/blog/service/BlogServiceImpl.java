@@ -42,14 +42,20 @@ public class BlogServiceImpl implements BlogService {
             @Override
             public Predicate toPredicate(Root<Blog> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
                 List<Predicate> predicates =new ArrayList<>();
-                if(!"".equals(blog.getTitle()) && blog.getTitle() != null){
+                if(!"".equals(blog.getTitle()) && blog.getTitle() != null){//判断查询条件之一:根据博客标题查询
                     predicates.add(cb.like(root.<String>get("title"),"%"+blog.getTitle()+"%"));
                 }
-                if(blog.getTypeId()!= null){
+                if(blog.getTypeId()!= null){//判断查询条件之二:根据博客分类查询
                     predicates.add(cb.equal(root.<Integer>get("type").get("id"),blog.getTypeId()));
                 }
-                if(blog.isRecommend()){
+                if(blog.isRecommend()){//判断查询条件之三:根据博客是否被推荐查询
                     predicates.add(cb.equal(root.<Boolean>get("recommend"),blog.isRecommend()));
+                }
+                if(blog.isPublished()){   //判断查询条件之四:根据博客是否已发布查询，过滤掉状态为草稿的博客
+                    predicates.add(cb.equal(root.<Boolean>get("published"),blog.isPublished()));
+                }
+                if(blog.isDraft()){   //判断查询条件之五:根据博客是否是草稿，实现后台查询草稿博客功能
+                    predicates.add(cb.equal(root.<Boolean>get("published"),!blog.isDraft()));
                 }
                 cq.where(predicates.toArray(new Predicate[predicates.size()]));
                 return null;
@@ -60,9 +66,13 @@ public class BlogServiceImpl implements BlogService {
     @Transactional
     @Override
     public Blog saveBlog(Blog blog) {
-        blog.setCreateTime(new Date());
-        blog.setUpdateTime(new Date());
-        blog.setViews(0);
+        if(blog.getId() == null){
+            blog.setCreateTime(new Date());
+            blog.setUpdateTime(new Date());
+            blog.setViews(0);
+        }else{
+            blog.setUpdateTime(new Date());
+        }
         return blogRepository.save(blog);
     }
 
@@ -74,6 +84,7 @@ public class BlogServiceImpl implements BlogService {
             throw new NotFoundException("该博客不存在");
         }
         BeanUtils.copyProperties(blog,b);
+        b.setUpdateTime(new Date());
         return blogRepository.save(b);
     }
 
@@ -82,4 +93,6 @@ public class BlogServiceImpl implements BlogService {
     public void deleteBlog(Long id) {
         blogRepository.deleteById(id);
     }
+
+
 }

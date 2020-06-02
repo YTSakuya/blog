@@ -42,18 +42,18 @@ public class BlogController {
     private TagService tagService;
 
     @GetMapping("/blogs")
-    public String blogs(@PageableDefault(size = 10,sort = {"updateTime"},direction = Sort.Direction.DESC)
+    public String blogs(@PageableDefault(size = 5,sort = {"updateTime"},direction = Sort.Direction.DESC)
                                     Pageable pageable, BlogQuery blog, Model model){
         model.addAttribute("types",typeService.listType());
         model.addAttribute("page",blogService.listBlog(pageable,blog));
         return LIST;
     }
     @PostMapping("/blogs/search")
-    public String search(@PageableDefault(size = 10,sort = {"updateTime"},direction = Sort.Direction.DESC)
+    public String search(@PageableDefault(size = 5,sort = {"updateTime"},direction = Sort.Direction.DESC)
                                 Pageable pageable, BlogQuery blog, Model model){
         model.addAttribute("types",typeService.listType());
         model.addAttribute("page",blogService.listBlog(pageable,blog));
-        return "admin/blogs :: bloglist";
+        return "admin/blogs :: blogList";
     }
 
     @GetMapping("/blogs/add")
@@ -77,8 +77,12 @@ public class BlogController {
         blog.setUser((User)session.getAttribute("user"));
         blog.setType(typeService.getType(blog.getType().getId()));
         blog.setTags(tagService.listTag(blog.getTagIds()));
-
-        Blog b =blogService.saveBlog(blog);
+        Blog b;
+        if(blog.getId() == null){
+            b =blogService.saveBlog(blog);
+        }else{
+            b =blogService.updateBlog(blog.getId(),blog);
+        }
         if (b == null) {
             attributes.addFlashAttribute("message","操作失败");
         }else{
@@ -87,7 +91,12 @@ public class BlogController {
         return REDIRECT_LIST;
     }
 
-
+    @GetMapping("/blogs/{id}/delete")
+    private String delete(@PathVariable Long id,RedirectAttributes attributes){
+        blogService.deleteBlog(id);
+        attributes.addFlashAttribute("message","删除成功");
+        return REDIRECT_LIST;
+    }
 
     private void setTypeAndTag(Model model){
         model.addAttribute("types",typeService.listType()); //获取所有分类
